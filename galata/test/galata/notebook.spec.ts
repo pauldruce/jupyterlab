@@ -19,6 +19,17 @@ test.describe('Notebook Tests', () => {
     );
   });
 
+  test('Create New Notebook with kernel', async ({ page, tmpPath }) => {
+    const fileName = 'create_kernel_test.ipynb';
+    await page.notebook.createNew(fileName, { kernel: 'python3' });
+    await page.getByRole('main').getByText(fileName).waitFor();
+
+    expect(await page.contents.fileExists(`${tmpPath}/${fileName}`)).toEqual(
+      true
+    );
+    expect(await page.notebook.getKernelName()).toEqual('python3');
+  });
+
   test('Create Markdown cell', async ({ page }) => {
     await page.notebook.createNew();
 

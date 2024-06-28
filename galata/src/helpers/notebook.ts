@@ -1419,11 +1419,14 @@ export class NotebookHelper {
    * @param name Name of the notebook
    * @returns Name of the created notebook or null if it failed
    */
-  async createNew(name?: string): Promise<string | null> {
+  async createNew(name?: string, options?: { kernel?: string }): Promise<string | null> {
     await this.menu.clickMenuItem('File>New>Notebook');
 
     const page = this.page;
     await page.locator('.jp-Dialog').waitFor();
+    if (options?.kernel) {
+      await page.getByRole('dialog').getByRole('combobox').selectOption(`{"name":"${options.kernel}"}`);
+    }
     await page.click('.jp-Dialog .jp-mod-accept');
 
     const activeTab = this.activity.getTabLocator();
