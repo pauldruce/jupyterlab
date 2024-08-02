@@ -27,7 +27,23 @@ test.describe('Notebook Tests', () => {
     expect(await page.contents.fileExists(`${tmpPath}/${fileName}`)).toEqual(
       true
     );
-    expect(await page.notebook.getKernelName()).toEqual('python3');
+    const toolbar = page.getByRole('toolbar', { name: 'notebook actions' });
+    await expect(toolbar.getByText('Python 3 (ipykernel)')).toBeVisible();
+  });
+
+  test('Create New Notebook with kernel - no kernel', async ({
+    page,
+    tmpPath
+  }) => {
+    const fileName = 'create_no_kernel_test.ipynb';
+    await page.notebook.createNew(fileName, { kernel: 'null' });
+    await page.getByRole('main').getByText(fileName).waitFor();
+
+    expect(await page.contents.fileExists(`${tmpPath}/${fileName}`)).toEqual(
+      true
+    );
+    const toolbar = page.getByRole('toolbar', { name: 'notebook actions' });
+    await expect(toolbar.getByText('No Kernel')).toBeVisible();
   });
 
   test('Create Markdown cell', async ({ page }) => {

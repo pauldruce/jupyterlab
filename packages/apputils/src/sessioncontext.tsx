@@ -1755,7 +1755,7 @@ namespace Private {
     group.label = trans.__('Use No Kernel');
     const option = document.createElement('option');
     option.text = trans.__('No Kernel');
-    option.value = 'null';
+    option.value = JSON.stringify({ name: 'null' });
     group.appendChild(option);
     return group;
   }
